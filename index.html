@@ -1,0 +1,2000 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shital Residency - Premium Society Management System (Demo)</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS v3 CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        display: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        glass: {
+                            light: 'rgba(255, 255, 255, 0.45)',
+                            dark: 'rgba(15, 23, 42, 0.45)',
+                            border: {
+                                light: 'rgba(255, 255, 255, 0.25)',
+                                dark: 'rgba(255, 255, 255, 0.08)'
+                            }
+                        },
+                        premium: {
+                            gold: '#D4AF37',
+                            platinum: '#E5E4E2',
+                            primary: '#6366f1',
+                            secondary: '#a855f7',
+                            accent: '#ec4899',
+                            darkBg: '#090d16',
+                            lightBg: '#f8fafc'
+                        }
+                    },
+                    boxShadow: {
+                        'glass-light': '0 8px 32px 0 rgba(31, 38, 135, 0.08)',
+                        'glass-dark': '0 8px 32px 0 rgba(0, 0, 0, 0.37)',
+                        'glow-primary': '0 0 20px rgba(99, 102, 241, 0.25)',
+                        'glow-secondary': '0 0 20px rgba(168, 85, 247, 0.25)'
+                    },
+                    backdropBlur: {
+                        'glass': '16px',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Premium UI Custom Styling -->
+    <style>
+        /* Custom Animations */
+        @keyframes blob {
+            0%, 100% { transform: translate(0px, 0px) scale(1); }
+            33% { transform: translate(30px, -50px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.95); }
+        }
+        @keyframes spin-reverse {
+            0% { transform: rotate(360deg); }
+            100% { transform: rotate(0deg); }
+        }
+        .animate-blob { animation: blob 10s infinite alternate ease-in-out; }
+        .animate-spin-reverse { animation: spin-reverse 1.5s linear infinite; }
+        .animation-delay-2000 { animation-delay: 2s; }
+        .animation-delay-4000 { animation-delay: 4s; }
+
+        /* Glassmorphism Styles */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.06);
+            transition: background 0.3s, border-color 0.3s;
+        }
+        .dark .glass-panel {
+            background: rgba(15, 23, 42, 0.45);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        }
+        .premium-card { transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+        .premium-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+        }
+        .dark .premium-card:hover {
+            border-color: rgba(99, 102, 241, 0.3);
+            box-shadow: 0 20px 40px rgba(99, 102, 241, 0.1), 0 0 20px rgba(99, 102, 241, 0.15);
+        }
+
+        /* 3D Card Flip */
+        .perspective-1000 { perspective: 1000px; }
+        .preserve-3d { transform-style: preserve-3d; }
+        .backface-hidden { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+        .rotate-y-180 { transform: rotateY(180deg); }
+
+        /* Scrollbars */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(99, 102, 241, 0.2); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(99, 102, 241, 0.4); }
+
+        /* Glow Elements */
+        .text-gradient {
+            background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .glow-btn { position: relative; overflow: hidden; z-index: 1; }
+        .glow-btn::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 200%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transform: skewX(-20deg) translateX(-100%); transition: transform 0.6s ease; z-index: -1;
+        }
+        .glow-btn:hover::before { transform: skewX(-20deg) translateX(100%); }
+
+        /* Inputs */
+        .glass-input {
+            background: rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            outline: none; transition: all 0.3s ease;
+        }
+        .dark .glass-input {
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glass-input:focus {
+            border-color: #6366f1; box-shadow: 0 0 10px rgba(99, 102, 241, 0.2);
+        }
+        .dark .glass-input:focus {
+            border-color: #818cf8; box-shadow: 0 0 10px rgba(129, 140, 248, 0.15);
+        }
+    </style>
+    
+    <!-- Dependencies (Chart.js, SheetJS, jsPDF, Lucide) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-slate-50 dark:bg-[#090d16] text-slate-800 dark:text-slate-100 font-sans transition-colors duration-500 min-h-screen overflow-x-hidden relative flex flex-col justify-between">
+    
+    <!-- Dynamic Glowing Ambient Background Blobs -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
+        <div class="absolute -top-[20%] -left-[10%] w-[60%] h-[60%] rounded-full bg-indigo-900/20 blur-[120px] dark:block hidden animate-blob"></div>
+        <div class="absolute -bottom-[20%] -right-[10%] w-[60%] h-[60%] rounded-full bg-purple-900/20 blur-[120px] dark:block hidden animate-blob animation-delay-2000"></div>
+        <div class="absolute top-[30%] left-[40%] w-[40%] h-[40%] rounded-full bg-pink-900/10 blur-[100px] dark:block hidden animate-blob animation-delay-4000"></div>
+        <div class="absolute -top-[20%] -left-[10%] w-[60%] h-[60%] rounded-full bg-indigo-200/40 blur-[120px] dark:hidden block animate-blob"></div>
+        <div class="absolute -bottom-[20%] -right-[10%] w-[60%] h-[60%] rounded-full bg-purple-200/40 blur-[120px] dark:hidden block animate-blob animation-delay-2000"></div>
+    </div>
+
+    <!-- Toast Notification Overlay -->
+    <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-3 max-w-sm pointer-events-none"></div>
+
+    <!-- SPA Target -->
+    <main id="app" class="relative z-10 w-full flex-grow flex flex-col"></main>
+
+    <!-- Modals Host -->
+    <div id="modal-container"></div>
+
+    <!-- Core App Logic Script -->
+    <script>
+        // ==========================================
+        // 1. DATA SEEDING & LOCAL STORAGE ENGINE
+        // ==========================================
+        const MOCK_STORAGE_KEY_MEMBERS = 'gd_demo_members';
+        const MOCK_STORAGE_KEY_BILLS = 'gd_demo_bills';
+        const MOCK_STORAGE_KEY_COMPLAINTS = 'gd_demo_complaints';
+        const MOCK_STORAGE_KEY_SESSION = 'gd_demo_session';
+        const MOCK_STORAGE_KEY_THEME = 'gd_demo_theme';
+        const MOCK_STORAGE_KEY_ADMINS = 'gd_demo_admins';
+
+        const INITIAL_ADMINS = [
+            { id: 'a1', name: 'Society Admin', email: 'admin@society.com', password: 'admin123', role: 'admin' }
+        ];
+
+                const INITIAL_MEMBERS = [];
+
+        const INITIAL_BILLS = [];
+
+        const INITIAL_COMPLAINTS = [];
+
+        function seedDB() {
+            if (localStorage.getItem('granddome_data_ver_2026') !== 'cleared') {
+                localStorage.removeItem(MOCK_STORAGE_KEY_MEMBERS);
+                localStorage.removeItem(MOCK_STORAGE_KEY_BILLS);
+                localStorage.removeItem(MOCK_STORAGE_KEY_COMPLAINTS);
+                localStorage.setItem('granddome_data_ver_2026', 'cleared');
+            }
+            if (!localStorage.getItem(MOCK_STORAGE_KEY_MEMBERS)) localStorage.setItem(MOCK_STORAGE_KEY_MEMBERS, JSON.stringify(INITIAL_MEMBERS));
+            if (!localStorage.getItem(MOCK_STORAGE_KEY_BILLS)) localStorage.setItem(MOCK_STORAGE_KEY_BILLS, JSON.stringify(INITIAL_BILLS));
+            if (!localStorage.getItem(MOCK_STORAGE_KEY_COMPLAINTS)) localStorage.setItem(MOCK_STORAGE_KEY_COMPLAINTS, JSON.stringify(INITIAL_COMPLAINTS));
+            if (!localStorage.getItem(MOCK_STORAGE_KEY_ADMINS)) localStorage.setItem(MOCK_STORAGE_KEY_ADMINS, JSON.stringify(INITIAL_ADMINS));
+        }
+        seedDB();
+
+        const getDB = (key) => JSON.parse(localStorage.getItem(key)) || [];
+        const saveDB = (key, data) => localStorage.setItem(key, JSON.stringify(data));
+
+        // ==========================================
+        // 2. THEME AND TOAST SYSTEM
+        // ==========================================
+        function initTheme() {
+            const stored = localStorage.getItem(MOCK_STORAGE_KEY_THEME) || 'dark';
+            document.documentElement.className = stored;
+        }
+        
+        function toggleTheme() {
+            const isDark = document.documentElement.classList.contains('dark');
+            const target = isDark ? 'light' : 'dark';
+            document.documentElement.className = target;
+            localStorage.setItem(MOCK_STORAGE_KEY_THEME, target);
+            showToast(`Theme switched to ${target}`, 'info');
+            
+            // Re-render current page to align styles
+            resolveRoute();
+        }
+
+        function showToast(msg, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `flex items-center gap-3 p-4 rounded-xl glass-panel shadow-lg border text-sm transition-all duration-500 translate-x-12 opacity-0 select-none pointer-events-auto border-${type === 'error' ? 'red' : type === 'warning' ? 'yellow' : 'green'}-500/30`;
+            
+            let icon = 'check-circle';
+            let color = 'text-green-500';
+            if (type === 'error') { icon = 'alert-triangle'; color = 'text-red-500'; }
+            if (type === 'info') { icon = 'info'; color = 'text-indigo-500'; }
+
+            toast.innerHTML = `
+                <i data-lucide="${icon}" class="${color} w-5 h-5 flex-shrink-0 animate-bounce"></i>
+                <span class="font-medium">${msg}</span>
+            `;
+            container.appendChild(toast);
+            lucide.createIcons();
+            
+            setTimeout(() => toast.classList.remove('translate-x-12', 'opacity-0'), 50);
+            setTimeout(() => {
+                toast.classList.add('translate-x-12', 'opacity-0');
+                setTimeout(() => toast.remove(), 500);
+            }, 3000);
+        }
+
+        // ==========================================
+        // 3. AUTHENTICATION & SESSION GUARDS
+        // ==========================================
+        const auth = {
+            getCurrentUser: () => JSON.parse(localStorage.getItem(MOCK_STORAGE_KEY_SESSION)),
+            login: (email, password) => {
+                const mail = email.trim().toLowerCase();
+                const admins = getDB(MOCK_STORAGE_KEY_ADMINS);
+                const admin = admins.find(a => a.email.toLowerCase() === mail);
+                if (admin && password === admin.password) {
+                    const session = { email: mail, role: 'admin', name: admin.name };
+                    localStorage.setItem(MOCK_STORAGE_KEY_SESSION, JSON.stringify(session));
+                    return session;
+                }
+                const members = getDB(MOCK_STORAGE_KEY_MEMBERS);
+                const res = members.find(m => m.email.toLowerCase() === mail || m.flatNo === email.trim());
+                if (res && password === (res.password || 'resident123')) {
+                    const session = { ...res, role: 'resident' };
+                    localStorage.setItem(MOCK_STORAGE_KEY_SESSION, JSON.stringify(session));
+                    return session;
+                }
+                throw new Error('Invalid Credentials! Try: admin@society.com/admin123 or resident@society.com/resident123');
+            },
+            logout: () => {
+                localStorage.removeItem(MOCK_STORAGE_KEY_SESSION);
+                showToast('Logged out successfully', 'info');
+                navigate('#/login');
+            }
+        };
+
+        // ==========================================
+        // 4. CLIENT SIDE ROUTER
+        // ==========================================
+        function navigate(hash) { window.location.hash = hash; }
+        window.addEventListener('hashchange', resolveRoute);
+
+        function resolveRoute() {
+            const hash = window.location.hash || '#/login';
+            const user = auth.getCurrentUser();
+
+            if (hash !== '#/login' && !user) { navigate('#/login'); return; }
+            if (hash === '#/login' && user) { navigate(user.role === 'admin' ? '#/admin' : '#/resident'); return; }
+            if (hash === '#/admin' && user.role !== 'admin') { navigate('#/resident'); return; }
+            if (hash === '#/resident' && user.role !== 'resident') { navigate('#/admin'); return; }
+
+            const app = document.getElementById('app');
+            if (hash === '#/login') renderLogin(app);
+            if (hash === '#/admin') renderAdmin(app);
+            if (hash === '#/resident') renderResident(app);
+        }
+
+        // ==========================================
+        // 5. GLOBAL HEADER COMPONENT
+        // ==========================================
+        function getHeaderHtml() {
+            const user = auth.getCurrentUser();
+            return `
+                <header class="w-full glass-panel sticky top-0 z-40 border-b border-glass-border-light dark:border-glass-border-dark px-6 py-4 flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-white flex items-center justify-center shadow-md overflow-hidden p-0.5 border border-slate-200 dark:border-slate-800">
+                            <img src="logo.png" alt="Shital Residency Logo" class="w-full h-full object-contain">
+                        </div>
+                        <div>
+                            <h1 class="text-xl font-display font-bold bg-gradient-to-r from-indigo-400 to-purple-500 bg-clip-text text-transparent">Shital Residency</h1>
+                            <p class="text-[10px] uppercase tracking-widest font-semibold text-indigo-400/80 -mt-1">Society Management</p>
+                        </div>
+                        <span class="ml-3 px-2 py-0.5 rounded-full text-[9px] font-bold bg-amber-500/10 border border-amber-500/30 text-amber-500 uppercase tracking-wider animate-pulse flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span> Sandbox Demo
+                        </span>
+                    </div>
+                    
+                    <div class="flex items-center gap-4">
+                        <button onclick="toggleTheme()" class="w-10 h-10 rounded-xl glass-panel hover:bg-slate-200 dark:hover:bg-slate-800 transition-all flex items-center justify-center border border-glass-border-light dark:border-glass-border-dark">
+                            <i data-lucide="sun" class="w-5 h-5 text-amber-400 dark:hidden"></i>
+                            <i data-lucide="moon" class="w-5 h-5 text-indigo-400 dark:block hidden"></i>
+                        </button>
+                        
+                        <div class="flex items-center gap-3 pl-4 border-l border-glass-border-light dark:border-glass-border-dark relative">
+                            <div class="hidden sm:block text-right">
+                                <h4 class="text-sm font-semibold">${user.name}</h4>
+                                <p class="text-[11px] text-slate-400">${user.role === 'admin' ? 'Administrator' : `Flat ${user.building}-${user.flatNo}`}</p>
+                            </div>
+                            <button id="profile-btn" onclick="toggleProfileDropdown(event)" class="w-10 h-10 rounded-full bg-indigo-500/10 border-2 border-indigo-500/30 flex items-center justify-center font-bold text-indigo-400">
+                                ${user.name.charAt(0)}
+                            </button>
+                            <div id="profile-dropdown" class="hidden absolute right-0 top-12 mt-2 w-48 rounded-xl glass-panel border border-glass-border-light dark:border-glass-border-dark p-2 shadow-xl z-50">
+                                <button onclick="auth.logout()" class="w-full text-left flex items-center gap-2 p-2 rounded-lg text-red-500 hover:bg-red-500/10 transition-colors">
+                                    <i data-lucide="log-out" class="w-4 h-4"></i>
+                                    <span class="text-xs font-semibold">Logout</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </header>
+            `;
+        }
+
+        function toggleProfileDropdown(e) {
+            e.stopPropagation();
+            const dropdown = document.getElementById('profile-dropdown');
+            dropdown.classList.toggle('hidden');
+        }
+        document.addEventListener('click', () => {
+            const d = document.getElementById('profile-dropdown');
+            if (d) d.classList.add('hidden');
+        });
+
+        // ==========================================
+        // 6. LOGIN PAGE VIEW
+        // ==========================================
+        function renderLogin(container) {
+            container.innerHTML = `
+                <div class="flex-grow flex flex-col items-center justify-center min-h-[90vh] px-4 py-12">
+                    <div class="flex flex-col items-center gap-2 mb-8 animate-fade-in">
+                        <div class="w-16 h-16 rounded-2xl bg-white flex items-center justify-center shadow-md overflow-hidden p-1 border border-slate-200 dark:border-slate-800">
+                            <img src="logo.png" alt="Shital Residency Logo" class="w-full h-full object-contain">
+                        </div>
+                        <h1 class="text-3xl font-display font-extrabold text-gradient tracking-tight">Shital Residency</h1>
+                        <p class="text-xs uppercase tracking-widest text-slate-400 font-semibold -mt-1">Society Management Portal</p>
+                    </div>
+
+                    <div class="w-full max-w-md perspective-1000 h-[530px]">
+                        <div id="flip-card" class="relative w-full h-full duration-700 preserve-3d">
+                            
+                            <!-- Admin login side -->
+                            <div class="absolute inset-0 w-full h-full backface-hidden glass-panel border border-glass-border-light dark:border-glass-border-dark rounded-3xl p-8 flex flex-col justify-between shadow-2xl">
+                                <form onsubmit="handleAuthSubmit(event, 'admin')" class="space-y-4">
+                                    <div class="flex items-center justify-between mb-4">
+                                        <h2 class="text-2xl font-display font-bold">Admin Portal</h2>
+                                        <span class="px-2 py-0.5 rounded text-[9px] font-bold bg-indigo-500/10 border border-indigo-500/30 text-indigo-400">STAFF</span>
+                                    </div>
+                                    <div class="space-y-1">
+                                        <label class="text-xs font-semibold text-slate-400">Email Address</label>
+                                        <input type="email" id="admin-email" placeholder="admin@society.com" required class="w-full px-4 py-2.5 rounded-xl glass-input text-sm">
+                                    </div>
+                                    <div class="space-y-1">
+                                        <label class="text-xs font-semibold text-slate-400">Access Password</label>
+                                        <input type="password" id="admin-password" placeholder="••••••••" required class="w-full px-4 py-2.5 rounded-xl glass-input text-sm">
+                                    </div>
+                                    <div class="text-right -mt-1">
+                                        <button type="button" onclick="openForgotPasswordModal('admin')" class="text-[11px] text-indigo-400 hover:underline focus:outline-none">Forgot Password?</button>
+                                    </div>
+                                    <button type="submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-semibold text-sm shadow-md transition-all glow-btn">
+                                        Authorize Staff Access
+                                    </button>
+                                </form>
+                                <div class="text-center mt-2">
+                                    <span class="text-xs text-slate-400">New staff?</span>
+                                    <button type="button" onclick="openAdminSignupModal()" class="text-xs text-indigo-400 font-bold hover:underline focus:outline-none ml-1">Create Staff Account</button>
+                                </div>
+                                <div class="text-center pt-4 border-t border-glass-border-light dark:border-glass-border-dark">
+                                    <button onclick="flipCard(true)" class="text-xs text-indigo-400 font-bold hover:underline">Switch to Resident Login →</button>
+                                </div>
+                            </div>
+ 
+                            <!-- Resident login side -->
+                            <div class="absolute inset-0 w-full h-full backface-hidden rotate-y-180 glass-panel border border-glass-border-light dark:border-glass-border-dark rounded-3xl p-8 flex flex-col justify-between shadow-2xl">
+                                <form onsubmit="handleAuthSubmit(event, 'resident')" class="space-y-4">
+                                    <div class="flex items-center justify-between mb-4">
+                                        <h2 class="text-2xl font-display font-bold">Resident Portal</h2>
+                                        <span class="px-2 py-0.5 rounded text-[9px] font-bold bg-purple-500/10 border border-purple-500/30 text-purple-400">HOME</span>
+                                    </div>
+                                    <div class="space-y-1">
+                                        <label class="text-xs font-semibold text-slate-400">Flat No. or Email</label>
+                                        <input type="text" id="res-username" placeholder="e.g. 201 or resident@society.com" required class="w-full px-4 py-2.5 rounded-xl glass-input text-sm">
+                                    </div>
+                                    <div class="space-y-1">
+                                        <label class="text-xs font-semibold text-slate-400">Access Key</label>
+                                        <input type="password" id="res-password" placeholder="••••••••" required class="w-full px-4 py-2.5 rounded-xl glass-input text-sm">
+                                    </div>
+                                    <div class="text-right -mt-1">
+                                        <button type="button" onclick="openForgotPasswordModal('resident')" class="text-[11px] text-purple-400 hover:underline focus:outline-none">Forgot Password?</button>
+                                    </div>
+                                    <button type="submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-purple-500 to-pink-600 text-white font-semibold text-sm shadow-md transition-all glow-btn">
+                                        Verify Resident Identity
+                                    </button>
+                                </form>
+                                <div class="text-center mt-2">
+                                    <span class="text-xs text-slate-400">New Resident?</span>
+                                    <button type="button" onclick="openSignupModal()" class="text-xs text-pink-400 font-bold hover:underline focus:outline-none ml-1">Create Account</button>
+                                </div>
+                                <div class="text-center pt-4 border-t border-glass-border-light dark:border-glass-border-dark">
+                                    <button onclick="flipCard(false)" class="text-xs text-purple-400 font-bold hover:underline">← Switch to Admin Login</button>
+                                </div>
+                            </div>
+ 
+                        </div>
+                    </div>   </div>
+                    </div>
+                </div>
+            `;
+            lucide.createIcons();
+        }
+
+        function flipCard(toResident) {
+            const card = document.getElementById('flip-card');
+            if (toResident) card.classList.add('rotate-y-180');
+            else card.classList.remove('rotate-y-180');
+        }
+
+        function handleAuthSubmit(e, role) {
+            e.preventDefault();
+            try {
+                if (role === 'admin') {
+                    const email = document.getElementById('admin-email').value;
+                    const pass = document.getElementById('admin-password').value;
+                    auth.login(email, pass);
+                    showToast('Admin Authorized!', 'success');
+                    navigate('#/admin');
+                } else {
+                    const user = document.getElementById('res-username').value;
+                    const pass = document.getElementById('res-password').value;
+                    auth.login(user, pass);
+                    showToast('Resident Verified!', 'success');
+                    navigate('#/resident');
+                }
+            } catch (err) {
+                showToast(err.message, 'error');
+            }
+        }
+
+        function openSignupModal() {
+            const container = document.getElementById('modal-container');
+            container.innerHTML = `
+                <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm">
+                    <div class="w-full max-w-md glass-panel rounded-2xl shadow-2xl p-6 relative z-50">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-md font-bold font-display text-gradient">Resident Registration</h3>
+                            <button onclick="closeModal()" class="text-slate-400 hover:text-slate-200"><i data-lucide="x" class="w-5 h-5"></i></button>
+                        </div>
+                        
+                        <form onsubmit="handleSignupSubmit(event)" class="space-y-4 text-xs">
+                            <div>
+                                <label class="text-[10px] text-slate-400 font-bold uppercase">Plot No</label>
+                                <input type="text" id="s-flat" required placeholder="e.g. 104" class="w-full px-3 py-2 rounded-xl glass-input mt-1">
+                            </div>
+                            <div>
+                                <label class="text-[10px] text-slate-400 font-bold uppercase">Resident Full Name</label>
+                                <input type="text" id="s-name" required placeholder="e.g. Rahul Verma" class="w-full px-3 py-2 rounded-xl glass-input mt-1">
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="text-[10px] text-slate-400 font-bold uppercase">Phone No</label>
+                                    <input type="text" id="s-phone" required placeholder="e.g. 9876543210" class="w-full px-3 py-2 rounded-xl glass-input mt-1">
+                                </div>
+                                <div>
+                                    <label class="text-[10px] text-slate-400 font-bold uppercase">Email ID</label>
+                                    <input type="email" id="s-email" required placeholder="e.g. rahul@gmail.com" class="w-full px-3 py-2 rounded-xl glass-input mt-1">
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="text-[10px] text-slate-400 font-bold uppercase">Occupancy Status</label>
+                                    <select id="s-status" class="w-full px-3 py-2 rounded-xl glass-input mt-1">
+                                        <option value="Owner">Owner</option>
+                                        <option value="Tenant">Tenant</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="text-[10px] text-slate-400 font-bold uppercase">Family Size</label>
+                                    <input type="number" id="s-count" min="1" value="3" class="w-full px-3 py-2 rounded-xl glass-input mt-1">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="text-[10px] text-slate-400 font-bold uppercase">Set Password</label>
+                                <input type="password" id="s-password" required placeholder="••••••••" class="w-full px-3 py-2 rounded-xl glass-input mt-1">
+                            </div>
+                            <button type="submit" class="w-full py-2.5 mt-2 rounded-xl bg-gradient-to-r from-purple-500 to-pink-600 text-white font-bold text-sm shadow-lg hover:shadow-purple-500/20 hover:scale-[1.02] transition-all">
+                                Register & Sign In
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            `;
+            lucide.createIcons();
+        }
+
+        function openAdminSignupModal() {
+            const container = document.getElementById('modal-container');
+            container.innerHTML = `
+                <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm">
+                    <div class="w-full max-w-md glass-panel rounded-2xl shadow-2xl p-6 relative z-50">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-md font-bold font-display text-gradient">Staff Registration</h3>
+                            <button onclick="closeModal()" class="text-slate-400 hover:text-slate-200"><i data-lucide="x" class="w-5 h-5"></i></button>
+                        </div>
+                        
+                        <form onsubmit="handleAdminSignupSubmit(event)" class="space-y-4 text-xs">
+                            <div>
+                                <label class="text-[10px] text-slate-400 font-bold uppercase">Staff Full Name</label>
+                                <input type="text" id="sa-name" required placeholder="e.g. Rajesh Kumar" class="w-full px-3 py-2 rounded-xl glass-input mt-1">
+                            </div>
+                            <div>
+                                <label class="text-[10px] text-slate-400 font-bold uppercase">Email Address</label>
+                                <input type="email" id="sa-email" required placeholder="e.g. staff@society.com" class="w-full px-3 py-2 rounded-xl glass-input mt-1">
+                            </div>
+                            <div>
+                                <label class="text-[10px] text-slate-400 font-bold uppercase">Set Password</label>
+                                <input type="password" id="sa-password" required placeholder="••••••••" class="w-full px-3 py-2 rounded-xl glass-input mt-1">
+                            </div>
+                            <div>
+                                <label class="text-[10px] text-slate-400 font-bold uppercase">Staff Security Code</label>
+                                <input type="text" id="sa-code" required placeholder="Enter verification code" class="w-full px-3 py-2 rounded-xl glass-input mt-1">
+                                <p class="text-[9px] text-amber-500 mt-1">Hint: Use security code <code class="bg-amber-500/10 px-1 rounded font-bold">SOCIETY2026</code></p>
+                            </div>
+                            <button type="submit" class="w-full py-2.5 mt-2 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-bold text-sm shadow-lg hover:shadow-indigo-500/20 hover:scale-[1.02] transition-all">
+                                Authorize Staff & Sign In
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            `;
+            lucide.createIcons();
+        }
+
+        function handleSignupSubmit(e) {
+            e.preventDefault();
+            const members = getDB(MOCK_STORAGE_KEY_MEMBERS);
+            
+            const bld = "";
+            const flat = document.getElementById('s-flat').value.trim();
+            const name = document.getElementById('s-name').value.trim();
+            const phone = document.getElementById('s-phone').value.trim();
+            const email = document.getElementById('s-email').value.trim();
+            const status = document.getElementById('s-status').value;
+            const count = parseInt(document.getElementById('s-count').value, 10);
+            const password = document.getElementById('s-password').value;
+
+            if (members.some(m => m.flatNo === flat)) {
+                showToast(`Plot ${flat} is already registered!`, 'error');
+                return;
+            }
+            if (members.some(m => m.email.toLowerCase() === email.toLowerCase())) {
+                showToast(`Email ${email} is already in use!`, 'error');
+                return;
+            }
+
+            const newResident = {
+                id: 'm_' + Date.now(),
+                building: bld,
+                flatNo: flat,
+                name: name,
+                phone: phone,
+                email: email,
+                status: status,
+                membersCount: count,
+                password: password,
+                joinDate: new Date().toISOString().split('T')[0]
+            };
+
+            members.push(newResident);
+            saveDB(MOCK_STORAGE_KEY_MEMBERS, members);
+
+            const session = { ...newResident, role: 'resident' };
+            localStorage.setItem(MOCK_STORAGE_KEY_SESSION, JSON.stringify(session));
+
+            showToast('Account created successfully!', 'success');
+            closeModal();
+            navigate('#/resident');
+        }
+
+        function handleAdminSignupSubmit(e) {
+            e.preventDefault();
+            const code = document.getElementById('sa-code').value.trim();
+            if (code !== 'SOCIETY2026') {
+                showToast('Invalid Staff Security Code!', 'error');
+                return;
+            }
+
+            const admins = getDB(MOCK_STORAGE_KEY_ADMINS);
+            const name = document.getElementById('sa-name').value.trim();
+            const email = document.getElementById('sa-email').value.trim();
+            const password = document.getElementById('sa-password').value;
+
+            if (admins.some(a => a.email.toLowerCase() === email.toLowerCase())) {
+                showToast(`Admin email ${email} is already registered!`, 'error');
+                return;
+            }
+
+            const newAdmin = {
+                id: 'a_' + Date.now(),
+                name: name,
+                email: email,
+                password: password,
+                role: 'admin'
+            };
+
+            admins.push(newAdmin);
+            saveDB(MOCK_STORAGE_KEY_ADMINS, admins);
+
+            const session = { email: email, role: 'admin', name: name };
+            localStorage.setItem(MOCK_STORAGE_KEY_SESSION, JSON.stringify(session));
+
+            showToast('Staff profile registered successfully!', 'success');
+            closeModal();
+            navigate('#/admin');
+        }
+
+        function openForgotPasswordModal(role) {
+            const container = document.getElementById('modal-container');
+            container.innerHTML = `
+                <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm">
+                    <div class="w-full max-w-md glass-panel rounded-2xl shadow-2xl p-6 relative z-50">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-md font-bold font-display text-gradient">Reset Password</h3>
+                            <button onclick="closeModal()" class="text-slate-400 hover:text-slate-200"><i data-lucide="x" class="w-5 h-5"></i></button>
+                        </div>
+                        
+                        <div id="fp-email-step" class="space-y-4">
+                            <p class="text-xs text-slate-400 leading-relaxed">Enter your registered email address to verify your identity and configure a new security password.</p>
+                            <form onsubmit="handleForgotPasswordVerify(event, '${role}')" class="space-y-4 text-xs">
+                                <div>
+                                    <label class="text-[10px] text-slate-400 font-bold uppercase">Registered Email</label>
+                                    <input type="email" id="fp-email" required placeholder="e.g. resident@society.com" class="w-full px-3 py-2 rounded-xl glass-input mt-1">
+                                </div>
+                                <button type="submit" class="w-full py-2.5 mt-2 rounded-xl bg-gradient-to-r from-${role === 'admin' ? 'indigo-500 to-purple-600' : 'purple-500 to-pink-600'} text-white font-bold text-sm shadow-lg hover:scale-[1.02] transition-all">
+                                    Verify Email
+                                </button>
+                            </form>
+                        </div>
+
+                        <div id="fp-reset-step" class="hidden space-y-4">
+                            <div class="p-3 bg-amber-500/10 border border-amber-500/30 rounded-xl text-amber-500 text-[11px] leading-relaxed">
+                                <strong class="font-bold">Sandbox Mode:</strong> Email verification verified. Please configure your new access password below.
+                            </div>
+                            <form onsubmit="handleForgotPasswordReset(event, '${role}')" class="space-y-4 text-xs">
+                                <input type="hidden" id="fp-verified-email">
+                                <div>
+                                    <label class="text-[10px] text-slate-400 font-bold uppercase">New Password</label>
+                                    <input type="password" id="fp-new-password" required placeholder="••••••••" class="w-full px-3 py-2 rounded-xl glass-input mt-1">
+                                </div>
+                                <button type="submit" class="w-full py-2.5 mt-2 rounded-xl bg-gradient-to-r from-${role === 'admin' ? 'indigo-500 to-purple-600' : 'purple-500 to-pink-600'} text-white font-bold text-sm shadow-lg hover:scale-[1.02] transition-all">
+                                    Reset Password
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            `;
+            lucide.createIcons();
+        }
+
+        function handleForgotPasswordVerify(e, role) {
+            e.preventDefault();
+            const email = document.getElementById('fp-email').value.trim().toLowerCase();
+            
+            let exists = false;
+            if (role === 'admin') {
+                const admins = getDB(MOCK_STORAGE_KEY_ADMINS);
+                exists = admins.some(a => a.email.toLowerCase() === email);
+            } else {
+                const members = getDB(MOCK_STORAGE_KEY_MEMBERS);
+                exists = members.some(m => m.email.toLowerCase() === email);
+            }
+
+            if (!exists) {
+                showToast('Email address not found in system registers!', 'error');
+                return;
+            }
+
+            document.getElementById('fp-email-step').classList.add('hidden');
+            document.getElementById('fp-reset-step').classList.remove('hidden');
+            document.getElementById('fp-verified-email').value = email;
+        }
+
+        function handleForgotPasswordReset(e, role) {
+            e.preventDefault();
+            const email = document.getElementById('fp-verified-email').value;
+            const newPassword = document.getElementById('fp-new-password').value;
+
+            if (role === 'admin') {
+                const admins = getDB(MOCK_STORAGE_KEY_ADMINS);
+                const idx = admins.findIndex(a => a.email.toLowerCase() === email);
+                admins[idx].password = newPassword;
+                saveDB(MOCK_STORAGE_KEY_ADMINS, admins);
+            } else {
+                const members = getDB(MOCK_STORAGE_KEY_MEMBERS);
+                const idx = members.findIndex(m => m.email.toLowerCase() === email);
+                members[idx].password = newPassword;
+                saveDB(MOCK_STORAGE_KEY_MEMBERS, members);
+            }
+
+            showToast('Password updated! Please log in.', 'success');
+            closeModal();
+        }
+
+        // ==========================================
+        // 7. ADMIN PORTAL VIEW & TABS
+        // ==========================================
+        let adminTab = 'dashboard';
+        let revenueChart = null;
+
+        function renderAdmin(container) {
+            container.innerHTML = `
+                ${getHeaderHtml()}
+                
+                <div class="flex-grow flex flex-col md:flex-row min-h-[calc(100vh-73px)]">
+                    <aside class="w-full md:w-64 glass-panel border-r border-glass-border-light dark:border-glass-border-dark p-4 flex flex-col justify-between">
+                        <nav class="flex flex-row md:flex-col gap-1 overflow-x-auto md:overflow-x-visible pb-2 md:pb-0">
+                            <button onclick="setAdminTab('dashboard')" id="tab-dashboard" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold hover:bg-indigo-500/10 hover:text-indigo-400 w-full text-left">
+                                <i data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard
+                            </button>
+                            <button onclick="setAdminTab('members')" id="tab-members" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold hover:bg-indigo-500/10 hover:text-indigo-400 w-full text-left">
+                                <i data-lucide="users" class="w-4 h-4"></i> Residents
+                            </button>
+                            <button onclick="setAdminTab('billing')" id="tab-billing" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold hover:bg-indigo-500/10 hover:text-indigo-400 w-full text-left">
+                                <i data-lucide="receipt" class="w-4 h-4"></i> Bills & Dues
+                            </button>
+                            <button onclick="setAdminTab('complaints')" id="tab-complaints" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold hover:bg-indigo-500/10 hover:text-indigo-400 w-full text-left">
+                                <i data-lucide="message-square" class="w-4 h-4"></i> Complaints
+                            </button>
+                        </nav>
+                    </aside>
+
+                    <section id="admin-main-pane" class="flex-grow p-6 md:p-8 overflow-y-auto max-w-7xl mx-auto w-full"></section>
+                </div>
+            `;
+            setAdminTab(adminTab);
+        }
+
+        function setAdminTab(tabId) {
+            adminTab = tabId;
+            document.querySelectorAll('[id^="tab-"]').forEach(btn => {
+                if (btn.id === `tab-${tabId}`) {
+                    btn.className = "flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold bg-indigo-500/15 text-indigo-400 shadow-sm border-l-4 border-indigo-500 w-full text-left";
+                } else {
+                    btn.className = "flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold hover:bg-indigo-500/10 hover:text-indigo-400 w-full text-left";
+                }
+            });
+
+            const pane = document.getElementById('admin-main-pane');
+            if (tabId === 'dashboard') loadAdminDashboard(pane);
+            if (tabId === 'members') loadAdminMembers(pane);
+            if (tabId === 'billing') loadAdminBilling(pane);
+            if (tabId === 'complaints') loadAdminComplaints(pane);
+            lucide.createIcons();
+        }
+
+        // --- Tab 1: Dashboard ---
+        function loadAdminDashboard(pane) {
+            const stats = calculateStats();
+            pane.innerHTML = `
+                <div class="space-y-6 animate-fade-in">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h2 class="text-2xl font-display font-bold">Society Dashboard</h2>
+                            <p class="text-xs text-slate-400">Financial aggregates and residency metrics.</p>
+                        </div>
+                        <button onclick="exportAnalytics()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-semibold text-xs flex items-center gap-2 glow-btn">
+                            <i data-lucide="download" class="w-4 h-4"></i> Export Monthly Report
+                        </button>
+                    </div>
+
+                    <!-- Statistics Cards -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div class="glass-panel p-5 rounded-2xl flex items-center justify-between">
+                            <div>
+                                <span class="text-[10px] uppercase font-bold text-slate-400">Total Residents</span>
+                                <h3 class="text-2xl font-display font-extrabold text-indigo-400 mt-1">${stats.membersCount}</h3>
+                            </div>
+                            <div class="w-10 h-10 rounded-lg bg-indigo-500/10 text-indigo-400 flex items-center justify-center"><i data-lucide="users" class="w-5 h-5"></i></div>
+                        </div>
+                        <div class="glass-panel p-5 rounded-2xl flex items-center justify-between">
+                            <div>
+                                <span class="text-[10px] uppercase font-bold text-slate-400">Income Collected</span>
+                                <h3 class="text-2xl font-display font-extrabold text-green-400 mt-1">₹${stats.totalIncome}</h3>
+                            </div>
+                            <div class="w-10 h-10 rounded-lg bg-green-500/10 text-green-400 flex items-center justify-center"><i data-lucide="trending-up" class="w-5 h-5"></i></div>
+                        </div>
+                        <div class="glass-panel p-5 rounded-2xl flex items-center justify-between">
+                            <div>
+                                <span class="text-[10px] uppercase font-bold text-slate-400">Outstanding Dues</span>
+                                <h3 class="text-2xl font-display font-extrabold text-rose-400 mt-1">₹${stats.totalOutstanding}</h3>
+                            </div>
+                            <div class="w-10 h-10 rounded-lg bg-rose-500/10 text-rose-400 flex items-center justify-center"><i data-lucide="credit-card" class="w-5 h-5"></i></div>
+                        </div>
+                        <div class="glass-panel p-5 rounded-2xl flex items-center justify-between">
+                            <div>
+                                <span class="text-[10px] uppercase font-bold text-slate-400">Late Fines Levied</span>
+                                <h3 class="text-2xl font-display font-extrabold text-amber-400 mt-1">₹${stats.totalPenalties}</h3>
+                            </div>
+                            <div class="w-10 h-10 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center"><i data-lucide="alert-circle" class="w-5 h-5"></i></div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <!-- Chart container -->
+                        <div class="glass-panel p-6 rounded-2xl lg:col-span-2">
+                            <h4 class="text-sm font-bold mb-4 flex items-center gap-2"><i data-lucide="bar-chart-2" class="w-4 h-4 text-indigo-400"></i> Monthly Dues Comparison</h4>
+                            <div class="relative h-[220px]"><canvas id="revenue-chart"></canvas></div>
+                        </div>
+                        
+                        <!-- AI Container -->
+                        <div class="glass-panel p-6 rounded-2xl flex flex-col justify-between relative overflow-hidden">
+                            <div>
+                                <h4 class="text-sm font-bold mb-3 flex items-center gap-2 text-purple-400"><i data-lucide="sparkles" class="w-4 h-4"></i> AI Society Auditor</h4>
+                                <div id="ai-summary-box" class="space-y-3 text-[11px] text-slate-400 max-h-[160px] overflow-y-auto pr-1">
+                                    <p class="italic text-slate-500">Audit logs not generated. Trigger an executive diagnostic review below.</p>
+                                </div>
+                            </div>
+                            <button onclick="runAIAudit()" id="ai-btn" class="w-full py-2 mt-4 rounded-xl bg-purple-600/10 border border-purple-500/30 text-purple-400 hover:bg-purple-600 hover:text-white font-semibold text-[11px] shadow-sm flex items-center justify-center gap-2">
+                                <i data-lucide="play" class="w-3.5 h-3.5"></i> Run AI Financial Audit
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Init Chart.js
+            setTimeout(() => {
+                const ctx = document.getElementById('revenue-chart');
+                if (!ctx) return;
+
+                if (revenueChart) revenueChart.destroy();
+                revenueChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: stats.months,
+                        datasets: [
+                            {
+                                label: 'Collected Income (₹)',
+                                data: stats.incomeHistory,
+                                backgroundColor: 'rgba(74, 222, 128, 0.4)',
+                                borderColor: 'rgba(74, 222, 128, 0.8)',
+                                borderWidth: 1.5,
+                                borderRadius: 5
+                            },
+                            {
+                                label: 'Outstanding Dues (₹)',
+                                data: stats.outstandingHistory,
+                                backgroundColor: 'rgba(251, 113, 133, 0.4)',
+                                borderColor: 'rgba(251, 113, 133, 0.8)',
+                                borderWidth: 1.5,
+                                borderRadius: 5
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                labels: {
+                                    color: document.documentElement.classList.contains('dark') ? '#94a3b8' : '#475569',
+                                    font: { family: 'Plus Jakarta Sans', size: 10 }
+                                }
+                            }
+                        },
+                        scales: {
+                            x: { grid: { display: false }, ticks: { color: '#94a3b8', font: { size: 9 } } },
+                            y: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#94a3b8', font: { size: 9 } } }
+                        }
+                    }
+                });
+            }, 50);
+        }
+
+        function calculateStats() {
+            const members = getDB(MOCK_STORAGE_KEY_MEMBERS);
+            const bills = getDB(MOCK_STORAGE_KEY_BILLS);
+
+            const totalIncome = bills.filter(b => b.status === 'Paid').reduce((s,b) => s + b.total, 0);
+            const totalOutstanding = bills.filter(b => b.status === 'Pending').reduce((s,b) => s + b.total, 0);
+            const totalPenalties = bills.reduce((s,b) => s + b.lateFee, 0);
+            const pendingCount = bills.filter(b => b.status === 'Pending').length;
+
+            const monthlyMap = {};
+            bills.forEach(b => {
+                if (!monthlyMap[b.month]) monthlyMap[b.month] = { income: 0, pending: 0 };
+                if (b.status === 'Paid') monthlyMap[b.month].income += b.total;
+                else monthlyMap[b.month].pending += b.total;
+            });
+
+            const months = Object.keys(monthlyMap);
+            const incomeHistory = months.map(m => monthlyMap[m].income);
+            const outstandingHistory = months.map(m => monthlyMap[m].pending);
+
+            return {
+                membersCount: members.length,
+                totalIncome,
+                totalOutstanding,
+                totalPenalties,
+                pendingCount,
+                months,
+                incomeHistory,
+                outstandingHistory,
+                rawHistory: monthlyMap
+            };
+        }
+
+        function runAIAudit() {
+            const stats = calculateStats();
+            const btn = document.getElementById('ai-btn');
+            const box = document.getElementById('ai-summary-box');
+            
+            btn.disabled = true;
+            box.innerHTML = `
+                <div class="flex flex-col items-center justify-center py-6 gap-2">
+                    <div class="w-6 h-6 border-2 border-purple-500/20 border-t-purple-500 rounded-full animate-spin"></div>
+                    <span class="text-[9px] text-purple-400">AI auditor analyzing collections ledger...</span>
+                </div>
+            `;
+
+            setTimeout(() => {
+                const totalProj = stats.totalIncome + stats.totalOutstanding || 1;
+                const ratio = Math.round((stats.totalIncome / totalProj) * 100);
+                
+                box.innerHTML = `
+                    <div class="space-y-3">
+                        <div class="p-2 bg-slate-950/30 border border-indigo-500/20 rounded-lg flex items-center justify-between">
+                            <span class="font-bold text-slate-300">Financial Treasury Score:</span>
+                            <span class="font-bold text-green-400">${ratio}% Collected</span>
+                        </div>
+                        <p class="leading-relaxed text-slate-300">
+                            <strong>AI Summary:</strong> Dues collections are running in normal limits. 
+                            ${stats.totalPenalties > 0 ? `Late fines of ₹${stats.totalPenalties} have accrued due to grace period delays.` : ''}
+                        </p>
+                        <ul class="list-disc pl-4 space-y-1 text-slate-400">
+                            <li>Wing A shows peak energy consumption patterns.</li>
+                            <li>Dispatch payment templates to the ${stats.pendingCount} outstanding flats.</li>
+                        </ul>
+                    </div>
+                `;
+                btn.disabled = false;
+                showToast('AI Audit Log Generated!', 'success');
+            }, 1000);
+        }
+
+        // --- Tab 2: Manage Members ---
+        function loadAdminMembers(pane) {
+            const members = getDB(MOCK_STORAGE_KEY_MEMBERS);
+            pane.innerHTML = `
+                <div class="space-y-6 animate-fade-in">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h2 class="text-2xl font-display font-bold">Residents Directory</h2>
+                            <p class="text-xs text-slate-400">Manage, register and search member accounts.</p>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <label class="px-3 py-1.5 rounded-lg border border-indigo-500/30 text-indigo-400 hover:bg-indigo-500/10 font-bold text-xs cursor-pointer">
+                                <i data-lucide="upload" class="inline w-3.5 h-3.5 mr-1"></i> Import Excel
+                                <input type="file" onchange="importExcel(event)" accept=".xlsx, .xls" class="hidden">
+                            </label>
+                            <button onclick="openMemberModal()" class="px-3 py-1.5 rounded-lg bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-bold text-xs glow-btn">
+                                <i data-lucide="plus" class="inline w-3.5 h-3.5 mr-1"></i> Register Resident
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Search and filters -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <input type="text" id="member-search" oninput="filterMembers()" placeholder="Search by name, flat or phone..." class="w-full px-4 py-2 rounded-xl glass-input text-xs">
+                        <select id="member-filter-status" onchange="filterMembers()" class="w-full px-4 py-2 rounded-xl glass-input text-xs">
+                            <option value="">All Occupancy Roles</option>
+                            <option value="Owner">Owners</option>
+                            <option value="Tenant">Tenants</option>
+                        </select>
+                    </div>
+
+                    <div class="glass-panel border border-glass-border-light dark:border-glass-border-dark rounded-2xl overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs border-collapse">
+                                <thead>
+                                    <tr class="bg-indigo-500/5 border-b border-glass-border-light dark:border-glass-border-dark text-slate-400 font-bold">
+                                        <th class="px-6 py-3">Flat</th>
+                                        <th class="px-6 py-3">Resident</th>
+                                        <th class="px-6 py-3">Contact Details</th>
+                                        <th class="px-6 py-3">Role</th>
+                                        <th class="px-6 py-3 text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="members-tbody" class="divide-y divide-glass-border-light dark:divide-glass-border-dark"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            `;
+            filterMembers();
+        }
+
+        function filterMembers() {
+            const members = getDB(MOCK_STORAGE_KEY_MEMBERS);
+            const query = document.getElementById('member-search').value.toLowerCase();
+            const role = document.getElementById('member-filter-status').value;
+            const tbody = document.getElementById('members-tbody');
+
+            const filtered = members.filter(m => {
+                const matchesSearch = m.name.toLowerCase().includes(query) || m.flatNo.includes(query) || m.phone.includes(query);
+                const matchesRole = !role || m.status === role;
+                return matchesSearch && matchesRole;
+            });
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="px-6 py-8 text-center text-slate-400 italic">No matches found.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = filtered.map(m => `
+                <tr class="hover:bg-indigo-500/5 transition-colors">
+                    <td class="px-6 py-3"><span class="px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 font-bold">${m.building ? m.building + '-' : 'Plot '}${m.flatNo}</span></td>
+                    <td class="px-6 py-3">
+                        <div class="font-bold">${m.name}</div>
+                        <div class="text-[9px] text-slate-400">Registered: ${m.joinDate}</div>
+                    </td>
+                    <td class="px-6 py-3">
+                        <div>${m.phone}</div>
+                        <div class="text-slate-400">${m.email}</div>
+                    </td>
+                    <td class="px-6 py-3">
+                        <span class="px-2 py-0.5 rounded text-[9px] font-bold ${m.status === 'Owner' ? 'bg-green-500/10 text-green-400' : 'bg-amber-500/10 text-amber-400'}">${m.status}</span>
+                    </td>
+                    <td class="px-6 py-3 text-right space-x-2">
+                        <button onclick="openMemberModal('${m.id}')" class="text-indigo-400 hover:underline font-bold focus:outline-none">Edit</button>
+                        <button onclick="deleteMember('${m.id}')" class="text-rose-400 hover:underline font-bold focus:outline-none">Delete</button>
+                    </td>
+                </tr>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        function deleteMember(id) {
+            if (confirm('Delete this resident? All local history will be closed.')) {
+                let members = getDB(MOCK_STORAGE_KEY_MEMBERS);
+                members = members.filter(m => m.id !== id);
+                saveDB(MOCK_STORAGE_KEY_MEMBERS, members);
+                showToast('Resident profile deleted', 'info');
+                loadAdminMembers(document.getElementById('admin-main-pane'));
+            }
+        }
+
+        function openMemberModal(id = null) {
+            const members = getDB(MOCK_STORAGE_KEY_MEMBERS);
+            const m = id ? members.find(item => item.id === id) : null;
+            const container = document.getElementById('modal-container');
+
+            container.innerHTML = `
+                <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm">
+                    <div class="w-full max-w-md glass-panel rounded-2xl shadow-2xl p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-md font-bold">${m ? 'Edit Resident Profile' : 'Register New Resident'}</h3>
+                            <button onclick="closeModal()" class="text-slate-400 hover:text-slate-200"><i data-lucide="x" class="w-5 h-5"></i></button>
+                        </div>
+                        
+                        <form onsubmit="handleMemberSubmit(event, '${id || ''}')" class="space-y-4 text-xs">
+                            <div>
+                                <label class="text-[10px] text-slate-400 font-bold uppercase">Plot No</label>
+                                <input type="text" id="m-flat" required value="${m ? m.flatNo : ''}" class="w-full px-3 py-2 rounded-xl glass-input mt-1">
+                            </div>
+                            <div>
+                                <label class="text-[10px] text-slate-400 font-bold uppercase">Resident Full Name</label>
+                                <input type="text" id="m-name" required value="${m ? m.name : ''}" class="w-full px-3 py-2 rounded-xl glass-input mt-1">
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="text-[10px] text-slate-400 font-bold uppercase">Phone No</label>
+                                    <input type="text" id="m-phone" required value="${m ? m.phone : ''}" class="w-full px-3 py-2 rounded-xl glass-input mt-1">
+                                </div>
+                                <div>
+                                    <label class="text-[10px] text-slate-400 font-bold uppercase">Email ID</label>
+                                    <input type="email" id="m-email" required value="${m ? m.email : ''}" class="w-full px-3 py-2 rounded-xl glass-input mt-1">
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="text-[10px] text-slate-400 font-bold uppercase">Occupancy Status</label>
+                                    <select id="m-status" class="w-full px-3 py-2 rounded-xl glass-input mt-1">
+                                        <option value="Owner" ${m && m.status === 'Owner' ? 'selected' : ''}>Owner</option>
+                                        <option value="Tenant" ${m && m.status === 'Tenant' ? 'selected' : ''}>Tenant</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="text-[10px] text-slate-400 font-bold uppercase">Family Size</label>
+                                    <input type="number" id="m-count" min="1" value="${m ? m.membersCount : '3'}" class="w-full px-3 py-2 rounded-xl glass-input mt-1">
+                                </div>
+                            </div>
+                            <button type="submit" class="w-full py-2.5 mt-2 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-bold">
+                                Save Details
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            `;
+            lucide.createIcons();
+        }
+
+        function closeModal() { document.getElementById('modal-container').innerHTML = ''; }
+
+        function handleMemberSubmit(e, id) {
+            e.preventDefault();
+            const members = getDB(MOCK_STORAGE_KEY_MEMBERS);
+            
+            const data = {
+                building: "",
+                flatNo: document.getElementById('m-flat').value.trim(),
+                name: document.getElementById('m-name').value.trim(),
+                phone: document.getElementById('m-phone').value.trim(),
+                email: document.getElementById('m-email').value.trim(),
+                status: document.getElementById('m-status').value,
+                membersCount: parseInt(document.getElementById('m-count').value, 10)
+            };
+
+            if (id) {
+                const index = members.findIndex(m => m.id === id);
+                members[index] = { ...members[index], ...data };
+                saveDB(MOCK_STORAGE_KEY_MEMBERS, members);
+                showToast('Resident profile saved!', 'success');
+            } else {
+                if (members.some(m => m.flatNo === data.flatNo)) {
+                    showToast(`Plot ${data.flatNo} is already registered!`, 'error');
+                    return;
+                }
+                const newM = {
+                    id: 'm_' + Date.now(),
+                    joinDate: new Date().toISOString().split('T')[0],
+                    ...data
+                };
+                members.push(newM);
+                saveDB(MOCK_STORAGE_KEY_MEMBERS, members);
+                showToast('Resident registered!', 'success');
+            }
+            closeModal();
+            loadAdminMembers(document.getElementById('admin-main-pane'));
+        }
+
+        // --- Tab 3: Bills & Dues ---
+        function loadAdminBilling(pane) {
+            pane.innerHTML = `
+                <div class="space-y-6 animate-fade-in">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h2 class="text-2xl font-display font-bold">Utility & Dues Bills</h2>
+                            <p class="text-xs text-slate-400">Generate bills and track payment receipts.</p>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <button onclick="exportBills()" class="px-3 py-1.5 rounded-lg border border-indigo-500/30 text-indigo-400 hover:bg-indigo-500/10 font-bold text-xs">
+                                <i data-lucide="download" class="inline w-3.5 h-3.5 mr-1"></i> Export Bills
+                            </button>
+                            <button onclick="openBillModal()" class="px-3 py-1.5 rounded-lg bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-bold text-xs glow-btn">
+                                <i data-lucide="file-plus" class="inline w-3.5 h-3.5 mr-1"></i> Post Dues Bill
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="glass-panel border border-glass-border-light dark:border-glass-border-dark rounded-2xl overflow-hidden shadow-xl">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs border-collapse">
+                                <thead>
+                                    <tr class="bg-indigo-500/5 border-b border-glass-border-light dark:border-glass-border-dark text-slate-400 font-bold">
+                                        <th class="px-6 py-3">Flat</th>
+                                        <th class="px-6 py-3">Billing Cycle</th>
+                                        <th class="px-6 py-3">Dues Breakdown</th>
+                                        <th class="px-6 py-3">Total Amount</th>
+                                        <th class="px-6 py-3">Status</th>
+                                        <th class="px-6 py-3 text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="bills-tbody" class="divide-y divide-glass-border-light dark:divide-glass-border-dark"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            `;
+            refreshBillsTable();
+        }
+
+        function refreshBillsTable() {
+            const bills = getDB(MOCK_STORAGE_KEY_BILLS);
+            const tbody = document.getElementById('bills-tbody');
+
+            if (bills.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="px-6 py-8 text-center text-slate-400 italic">No society dues bills logged yet.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = bills.map(b => `
+                <tr class="hover:bg-indigo-500/5 transition-colors">
+                    <td class="px-6 py-3 font-bold text-indigo-400">Flat ${b.flatNo}</td>
+                    <td class="px-6 py-3 font-medium">${b.month}</td>
+                    <td class="px-6 py-3 text-[10px] text-slate-400">
+                        Elec: ₹${b.electricity} | Garb: ₹${b.garbage} | Maint: ₹${b.maintenance}
+                        ${b.lateFee > 0 ? `<br><span class="text-amber-500 font-semibold">Fine Penalty: ₹${b.lateFee}</span>` : ''}
+                    </td>
+                    <td class="px-6 py-3 font-bold">₹${b.total}</td>
+                    <td class="px-6 py-3">
+                        <div class="flex flex-col gap-0.5">
+                            <span class="px-2 py-0.5 rounded text-[8px] font-bold w-14 text-center ${b.status === 'Paid' ? 'bg-green-500/10 text-green-400' : 'bg-rose-500/10 text-rose-400'}">${b.status}</span>
+                            <span class="text-[9px] text-slate-500">${b.status === 'Paid' ? `On ${b.paymentDate}` : `Due by ${b.dueDate}`}</span>
+                        </div>
+                    </td>
+                    <td class="px-6 py-3 text-right space-x-2">
+                        ${b.status === 'Pending' 
+                            ? `<button onclick="markBillPaid('${b.id}')" class="px-2.5 py-1 rounded bg-green-500/10 text-green-400 border border-green-500/20 font-bold hover:bg-green-500 hover:text-white transition-all">Collect</button>
+                               <button onclick="getAIReminder('${b.id}')" class="text-indigo-400 hover:underline" title="AI Reminder text"><i data-lucide="bell" class="inline w-3.5 h-3.5"></i></button>`
+                            : `<button onclick="markBillUnpaid('${b.id}')" class="px-2.5 py-1 rounded bg-rose-500/10 text-rose-400 border border-rose-500/20 font-bold hover:bg-rose-500 hover:text-white transition-all">Revert</button>`
+                        }
+                    </td>
+                </tr>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        function markBillPaid(id) {
+            const method = prompt('Specify payment route (UPI, Cash, NetBanking, Card):', 'UPI');
+            if (method !== null) {
+                const bills = getDB(MOCK_STORAGE_KEY_BILLS);
+                const idx = bills.findIndex(b => b.id === id);
+                bills[idx].status = 'Paid';
+                bills[idx].paymentDate = new Date().toISOString().split('T')[0];
+                bills[idx].paymentMethod = method || 'Cash';
+                saveDB(MOCK_STORAGE_KEY_BILLS, bills);
+                showToast('Dues invoice marked Paid!', 'success');
+                refreshBillsTable();
+            }
+        }
+
+        function markBillUnpaid(id) {
+            if (confirm('Revert payment stamp and mark as Pending?')) {
+                const bills = getDB(MOCK_STORAGE_KEY_BILLS);
+                const idx = bills.findIndex(b => b.id === id);
+                bills[idx].status = 'Pending';
+                bills[idx].paymentDate = null;
+                bills[idx].paymentMethod = null;
+                saveDB(MOCK_STORAGE_KEY_BILLS, bills);
+                showToast('Dues invoice reset to pending', 'info');
+                refreshBillsTable();
+            }
+        }
+
+        function getAIReminder(id) {
+            const bills = getDB(MOCK_STORAGE_KEY_BILLS);
+            const bill = bills.find(b => b.id === id);
+            const members = getDB(MOCK_STORAGE_KEY_MEMBERS);
+            const res = members.find(m => m.flatNo === bill.flatNo);
+
+            const txt = `✉️ SHITAL RESIDENCY NOTICE:
+Dear ${res ? res.name : 'Resident'},
+Your billing dues for ${bill.month} are outstanding for Flat ${bill.flatNo}.
+
+Total Dues: ₹${bill.total}
+Overdue Date: ${bill.dueDate}
+${bill.lateFee > 0 ? `Late Penalty Accrued: ₹${bill.lateFee}\n` : ''}
+Please log in to the resident web portal to clear your balance via UPI. Ignore if paid.
+- Management Office`;
+
+            alert(`💡 AI Drafted WhatsApp Notification Text:\n\n${txt}`);
+        }
+
+        function openBillModal() {
+            const members = getDB(MOCK_STORAGE_KEY_MEMBERS);
+            const flats = members.map(m => m.flatNo).sort((a,b) => Number(a) - Number(b));
+            const container = document.getElementById('modal-container');
+
+            container.innerHTML = `
+                <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm">
+                    <div class="w-full max-w-md glass-panel rounded-2xl p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-md font-bold">Distribute Monthly Bill</h3>
+                            <button onclick="closeModal()" class="text-slate-400 hover:text-slate-200"><i data-lucide="x" class="w-5 h-5"></i></button>
+                        </div>
+                        
+                        <form onsubmit="handleBillSubmit(event)" class="space-y-4 text-xs">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="text-[10px] text-slate-400 font-bold uppercase">Billing Flat</label>
+                                    <select id="b-target" class="w-full px-3 py-2 rounded-xl glass-input mt-1">
+                                        <option value="ALL">Apply to All Flats</option>
+                                        ${flats.map(f => `<option value="${f}">Flat ${f}</option>`).join('')}
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="text-[10px] text-slate-400 font-bold uppercase">Billing Cycle</label>
+                                    <input type="text" id="b-month" value="July 2026" required class="w-full px-3 py-2 rounded-xl glass-input mt-1">
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-3 gap-2">
+                                <div>
+                                    <label class="text-[10px] text-slate-400 font-bold uppercase">Electricity</label>
+                                    <input type="number" id="b-elec" value="2300" required class="w-full px-3 py-2 rounded-xl glass-input mt-1">
+                                </div>
+                                <div>
+                                    <label class="text-[10px] text-slate-400 font-bold uppercase">Garbage Collection</label>
+                                    <input type="number" id="b-garb" value="150" required class="w-full px-3 py-2 rounded-xl glass-input mt-1">
+                                </div>
+                                <div>
+                                    <label class="text-[10px] text-slate-400 font-bold uppercase">Maintenance</label>
+                                    <input type="number" id="b-maint" value="2500" required class="w-full px-3 py-2 rounded-xl glass-input mt-1">
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="text-[10px] text-slate-400 font-bold uppercase">Payment Due</label>
+                                    <input type="date" id="b-due" value="2026-07-15" required class="w-full px-3 py-2 rounded-xl glass-input mt-1">
+                                </div>
+                                <div>
+                                    <label class="text-[10px] text-slate-400 font-bold uppercase">Fine Penalty</label>
+                                    <input type="number" id="b-penalty" value="0" required class="w-full px-3 py-2 rounded-xl glass-input mt-1">
+                                </div>
+                            </div>
+                            <button type="submit" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-bold">
+                                Post Dues Bill
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            `;
+            lucide.createIcons();
+        }
+
+        function handleBillSubmit(e) {
+            e.preventDefault();
+            const target = document.getElementById('b-target').value;
+            const bills = getDB(MOCK_STORAGE_KEY_BILLS);
+            const members = getDB(MOCK_STORAGE_KEY_MEMBERS);
+
+            const billInfo = {
+                month: document.getElementById('b-month').value.trim(),
+                electricity: Number(document.getElementById('b-elec').value),
+                garbage: Number(document.getElementById('b-garb').value),
+                maintenance: Number(document.getElementById('b-maint').value),
+                lateFee: Number(document.getElementById('b-penalty').value),
+                dueDate: document.getElementById('b-due').value,
+                status: 'Pending',
+                paymentDate: null,
+                paymentMethod: null
+            };
+            billInfo.total = billInfo.electricity + billInfo.garbage + billInfo.maintenance + billInfo.lateFee;
+
+            if (target === 'ALL') {
+                members.forEach((m, idx) => {
+                    bills.unshift({
+                        id: 'b_dist_' + Date.now() + '_' + idx,
+                        flatNo: m.flatNo,
+                        ...billInfo
+                    });
+                });
+                showToast(`Invoices posted to all ${members.length} flats!`, 'success');
+            } else {
+                bills.unshift({
+                    id: 'b_indiv_' + Date.now(),
+                    flatNo: target,
+                    ...billInfo
+                });
+                showToast(`Invoice posted to Flat ${target}`, 'success');
+            }
+
+            saveDB(MOCK_STORAGE_KEY_BILLS, bills);
+            closeModal();
+            loadAdminBilling(document.getElementById('admin-main-pane'));
+        }
+
+        // --- Tab 4: Complaints Resolution ---
+        function loadAdminComplaints(pane) {
+            const complaints = getDB(MOCK_STORAGE_KEY_COMPLAINTS);
+            pane.innerHTML = `
+                <div class="space-y-6 animate-fade-in">
+                    <div>
+                        <h2 class="text-2xl font-display font-bold">Complaints Desk</h2>
+                        <p class="text-xs text-slate-400">Address plumbing, electrical and waste management work tickets.</p>
+                    </div>
+
+                    <div class="glass-panel border border-glass-border-light dark:border-glass-border-dark rounded-2xl overflow-hidden shadow-xl">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs border-collapse">
+                                <thead>
+                                    <tr class="bg-indigo-500/5 border-b border-glass-border-light dark:border-glass-border-dark text-slate-400 font-bold">
+                                        <th class="px-6 py-3">Flat</th>
+                                        <th class="px-6 py-3">Issue details</th>
+                                        <th class="px-6 py-3">Filed Date</th>
+                                        <th class="px-6 py-3">Status</th>
+                                        <th class="px-6 py-3 text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-glass-border-light dark:divide-glass-border-dark">
+                                    ${complaints.length === 0 ? `<tr><td colspan="5" class="px-6 py-8 text-center text-slate-400 italic">No tickets raised.</td></tr>` : complaints.map(c => `
+                                        <tr class="hover:bg-indigo-500/5 transition-colors">
+                                            <td class="px-6 py-3 font-bold text-slate-300">Flat ${c.flatNo}</td>
+                                            <td class="px-6 py-3 max-w-sm">
+                                                <div class="font-bold flex items-center gap-1.5">
+                                                    <span class="px-1.5 py-0.5 rounded text-[8px] bg-slate-500/10 text-slate-400">${c.category}</span>
+                                                    <span>${c.title}</span>
+                                                </div>
+                                                <p class="text-[10px] text-slate-400 mt-1">${c.description}</p>
+                                                ${c.reply ? `<div class="text-[10px] text-indigo-400 bg-indigo-500/5 border border-indigo-500/10 p-1.5 rounded mt-2"><strong>Reply:</strong> ${c.reply}</div>` : ''}
+                                            </td>
+                                            <td class="px-6 py-3 text-slate-400">${c.date}</td>
+                                            <td class="px-6 py-3">
+                                                <span class="px-2 py-0.5 rounded text-[8px] font-bold ${c.status === 'Resolved' ? 'bg-green-500/10 text-green-400' : c.status === 'In Progress' ? 'bg-amber-500/10 text-amber-400' : 'bg-rose-500/10 text-rose-400'}">${c.status}</span>
+                                            </td>
+                                            <td class="px-6 py-3 text-right">
+                                                <button onclick="openComplaintModal('${c.id}')" class="px-2 py-1 rounded bg-indigo-500/10 text-indigo-400 hover:bg-indigo-500 hover:text-white transition-all font-bold">Resolve</button>
+                                            </td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function openComplaintModal(id) {
+            const complaints = getDB(MOCK_STORAGE_KEY_COMPLAINTS);
+            const c = complaints.find(item => item.id === id);
+            const container = document.getElementById('modal-container');
+
+            container.innerHTML = `
+                <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm">
+                    <div class="w-full max-w-md glass-panel rounded-2xl p-6 shadow-2xl">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-md font-bold">Address Ticket</h3>
+                            <button onclick="closeModal()" class="text-slate-400 hover:text-slate-200"><i data-lucide="x" class="w-5 h-5"></i></button>
+                        </div>
+                        <div class="mb-4 bg-slate-950/20 p-3 rounded-lg text-[10px] space-y-1 text-slate-400">
+                            <div>Flat ${c.flatNo} | Reported: ${c.date}</div>
+                            <h4 class="font-bold text-slate-200">${c.title}</h4>
+                            <p>${c.description}</p>
+                        </div>
+                        <form onsubmit="handleComplaintSubmit(event, '${id}')" class="space-y-4 text-xs">
+                            <div>
+                                <label class="text-[10px] text-slate-400 font-bold uppercase">Status Update</label>
+                                <select id="c-status" class="w-full px-3 py-2 rounded-xl glass-input mt-1">
+                                    <option value="Pending" ${c.status === 'Pending' ? 'selected' : ''}>Pending Action</option>
+                                    <option value="In Progress" ${c.status === 'In Progress' ? 'selected' : ''}>Work in Progress</option>
+                                    <option value="Resolved" ${c.status === 'Resolved' ? 'selected' : ''}>Resolved / Closed</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="text-[10px] text-slate-400 font-bold uppercase">Action Reply Notes</label>
+                                <textarea id="c-reply" rows="3" required class="w-full px-3 py-2 rounded-xl glass-input mt-1 resize-none">${c.reply || ''}</textarea>
+                            </div>
+                            <button type="submit" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-bold">
+                                Close Complaint
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            `;
+            lucide.createIcons();
+        }
+
+        function handleComplaintSubmit(e, id) {
+            e.preventDefault();
+            const complaints = getDB(MOCK_STORAGE_KEY_COMPLAINTS);
+            const idx = complaints.findIndex(item => item.id === id);
+
+            complaints[idx].status = document.getElementById('c-status').value;
+            complaints[idx].reply = document.getElementById('c-reply').value.trim();
+
+            saveDB(MOCK_STORAGE_KEY_COMPLAINTS, complaints);
+            showToast('Work order ticket updated!', 'success');
+            closeModal();
+            loadAdminComplaints(document.getElementById('admin-main-pane'));
+        }
+
+        // ==========================================
+        // 8. RESIDENT PORTAL VIEW & TABS
+        // ==========================================
+        let residentTab = 'bills';
+
+        function renderResident(container) {
+            container.innerHTML = `
+                ${getHeaderHtml()}
+                
+                <div class="flex-grow flex flex-col md:flex-row min-h-[calc(100vh-73px)]">
+                    <aside class="w-full md:w-64 glass-panel border-r border-glass-border-light dark:border-glass-border-dark p-4 flex flex-col justify-between">
+                        <nav class="flex flex-row md:flex-col gap-1 overflow-x-auto md:overflow-x-visible pb-2 md:pb-0">
+                            <button onclick="setResidentTab('bills')" id="rtab-bills" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold hover:bg-indigo-500/10 hover:text-indigo-400 w-full text-left">
+                                <i data-lucide="receipt" class="w-4 h-4"></i> My Invoices
+                            </button>
+                            <button onclick="setResidentTab('complaints')" id="rtab-complaints" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold hover:bg-indigo-500/10 hover:text-indigo-400 w-full text-left">
+                                <i data-lucide="message-square" class="w-4 h-4"></i> Raise Issue
+                            </button>
+                            <button onclick="setResidentTab('profile')" id="rtab-profile" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold hover:bg-indigo-500/10 hover:text-indigo-400 w-full text-left">
+                                <i data-lucide="user-cog" class="w-4 h-4"></i> Settings
+                            </button>
+                        </nav>
+                    </aside>
+
+                    <section id="resident-main-pane" class="flex-grow p-6 md:p-8 overflow-y-auto max-w-5xl mx-auto w-full"></section>
+                </div>
+            `;
+            setResidentTab(residentTab);
+        }
+
+        function setResidentTab(tabId) {
+            residentTab = tabId;
+            document.querySelectorAll('[id^="rtab-"]').forEach(btn => {
+                if (btn.id === `rtab-${tabId}`) {
+                    btn.className = "flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold bg-indigo-500/15 text-indigo-400 shadow-sm border-l-4 border-indigo-500 w-full text-left";
+                } else {
+                    btn.className = "flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold hover:bg-indigo-500/10 hover:text-indigo-400 w-full text-left";
+                }
+            });
+
+            const pane = document.getElementById('resident-main-pane');
+            if (tabId === 'bills') loadResidentBills(pane);
+            if (tabId === 'complaints') loadResidentComplaints(pane);
+            if (tabId === 'profile') loadResidentProfile(pane);
+            lucide.createIcons();
+        }
+
+        // --- Resident: My Invoices ---
+        function loadResidentBills(pane) {
+            const user = auth.getCurrentUser();
+            const bills = getDB(MOCK_STORAGE_KEY_BILLS).filter(b => b.flatNo === user.flatNo);
+
+            const pending = bills.filter(b => b.status === 'Pending');
+            const totalDues = pending.reduce((s,b) => s + b.total, 0);
+
+            pane.innerHTML = `
+                <div class="space-y-6 animate-fade-in">
+                    <div>
+                        <h2 class="text-2xl font-display font-bold">My Billing Ledger</h2>
+                        <p class="text-xs text-slate-400">View charges breakdown, settle pending invoices and download receipts.</p>
+                    </div>
+
+                    <!-- Small statistics banner -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="glass-panel p-5 rounded-2xl flex items-center justify-between">
+                            <div>
+                                <span class="text-[9px] uppercase font-bold text-slate-400">Total Pending Dues</span>
+                                <h3 class="text-2xl font-display font-extrabold mt-1 ${totalDues > 0 ? 'text-rose-400' : 'text-green-400'}">₹${totalDues}</h3>
+                            </div>
+                            <div class="w-10 h-10 rounded-lg ${totalDues > 0 ? 'bg-rose-500/10 text-rose-400' : 'bg-green-500/10 text-green-400'} flex items-center justify-center"><i data-lucide="wallet" class="w-5 h-5"></i></div>
+                        </div>
+                        <div class="glass-panel p-5 rounded-2xl flex items-center justify-between">
+                            <div>
+                                <span class="text-[9px] uppercase font-bold text-slate-400">Account Slot</span>
+                                <h3 class="text-lg font-display font-bold mt-1 text-slate-200">Wing ${user.building}, Flat ${user.flatNo}</h3>
+                            </div>
+                            <div class="w-10 h-10 rounded-lg bg-indigo-500/10 text-indigo-400 flex items-center justify-center"><i data-lucide="home" class="w-5 h-5"></i></div>
+                        </div>
+                    </div>
+
+                    <div class="glass-panel border border-glass-border-light dark:border-glass-border-dark rounded-2xl overflow-hidden shadow-xl">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs border-collapse">
+                                <thead>
+                                    <tr class="bg-indigo-500/5 border-b border-glass-border-light dark:border-glass-border-dark text-slate-400 font-bold">
+                                        <th class="px-6 py-3">Billing Month</th>
+                                        <th class="px-6 py-3">Charges Breakdown</th>
+                                        <th class="px-6 py-3">Total Due</th>
+                                        <th class="px-6 py-3">Status</th>
+                                        <th class="px-6 py-3 text-right">Receipt & Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-glass-border-light dark:divide-glass-border-dark">
+                                    ${bills.length === 0 ? `<tr><td colspan="5" class="px-6 py-8 text-center text-slate-400 italic">No bill history logged.</td></tr>` : bills.map(b => `
+                                        <tr class="hover:bg-indigo-500/5 transition-colors">
+                                            <td class="px-6 py-3 font-bold text-slate-200">${b.month}</td>
+                                            <td class="px-6 py-3 text-[10px] text-slate-400">
+                                                Elec: ₹${b.electricity} | Garb: ₹${b.garbage} | Maint: ₹${b.maintenance}
+                                                ${b.lateFee > 0 ? ` | <span class="text-amber-500">Late Fee: ₹${b.lateFee}</span>` : ''}
+                                            </td>
+                                            <td class="px-6 py-3 font-bold">₹${b.total}</td>
+                                            <td class="px-6 py-3">
+                                                <span class="px-2 py-0.5 rounded text-[8px] font-bold ${b.status === 'Paid' ? 'bg-green-500/10 text-green-400' : 'bg-rose-500/10 text-rose-400'}">${b.status}</span>
+                                            </td>
+                                            <td class="px-6 py-3 text-right">
+                                                ${b.status === 'Paid' 
+                                                    ? `<button onclick="downloadReceiptPDF('${b.id}')" class="px-2.5 py-1.5 rounded-lg bg-indigo-500/10 text-indigo-400 hover:bg-indigo-500 hover:text-white transition-all font-bold text-[10px] ml-auto"><i data-lucide="file-text" class="inline w-3 h-3 mr-1"></i> PDF Receipt</button>`
+                                                    : `<button onclick="payResidentBill('${b.id}')" class="px-2.5 py-1.5 rounded-lg bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold text-[10px] ml-auto shadow-sm hover:scale-105 active:scale-95 transition-all"><i data-lucide="credit-card" class="inline w-3 h-3 mr-1"></i> Pay Dues (UPI)</button>`
+                                                }
+                                            </td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function payResidentBill(id) {
+            const bills = getDB(MOCK_STORAGE_KEY_BILLS);
+            const idx = bills.findIndex(b => b.id === id);
+            
+            const pin = prompt(`💳 UPI Sandboxed Gateway\nPay Amount: ₹${bills[idx].total}\nEnter secure UPI PIN:`, '••••');
+            if (pin !== null && pin !== '') {
+                bills[idx].status = 'Paid';
+                bills[idx].paymentDate = new Date().toISOString().split('T')[0];
+                bills[idx].paymentMethod = 'UPI (Online)';
+                saveDB(MOCK_STORAGE_KEY_BILLS, bills);
+                showToast('UPI Payment Successful!', 'success');
+                setResidentTab('bills');
+            }
+        }
+
+        // --- Resident: Raise Complaint ---
+        function loadResidentComplaints(pane) {
+            const user = auth.getCurrentUser();
+            const complaints = getDB(MOCK_STORAGE_KEY_COMPLAINTS).filter(c => c.flatNo === user.flatNo);
+
+            pane.innerHTML = `
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 animate-fade-in">
+                    <!-- Left column form -->
+                    <div class="glass-panel p-5 rounded-2xl h-fit">
+                        <h3 class="text-md font-bold mb-1 text-indigo-400">File Incident Ticket</h3>
+                        <p class="text-[10px] text-slate-400 mb-4">Request plumbing or corridor electrical resolution.</p>
+                        
+                        <form onsubmit="handleResidentComplaint(event)" class="space-y-4 text-xs">
+                            <div>
+                                <label class="text-[10px] text-slate-400 font-bold uppercase">Service Category</label>
+                                <select id="rc-cat" class="w-full px-3 py-2 rounded-xl glass-input mt-1">
+                                    <option value="Plumbing">Plumbing Work</option>
+                                    <option value="Electricity">Electrical Work</option>
+                                    <option value="Garbage">Garbage Disposal</option>
+                                    <option value="Security">Security & Parking</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="text-[10px] text-slate-400 font-bold uppercase">Topic Title</label>
+                                <input type="text" id="rc-title" required placeholder="Corridor light flickering" class="w-full px-3 py-2 rounded-xl glass-input mt-1">
+                            </div>
+                            <div>
+                                <label class="text-[10px] text-slate-400 font-bold uppercase">Detailed Issue Description</label>
+                                <textarea id="rc-desc" rows="3" required class="w-full px-3 py-2 rounded-xl glass-input mt-1 resize-none"></textarea>
+                            </div>
+                            <button type="submit" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-bold">
+                                Log Support Ticket
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Right Column log feed -->
+                    <div class="lg:col-span-2 space-y-4">
+                        <h3 class="text-sm font-bold"><i data-lucide="message-square" class="inline w-4 h-4 mr-1 text-indigo-400"></i> My Complaint Logs</h3>
+                        <div class="space-y-4 max-h-[400px] overflow-y-auto pr-1">
+                            ${complaints.length === 0 ? `<div class="glass-panel p-6 rounded-2xl text-center text-slate-400 text-xs italic">No tickets raised. Your record is clean!</div>` : complaints.map(c => `
+                                <div class="glass-panel p-4 rounded-xl space-y-2 relative">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center gap-1.5">
+                                            <span class="px-1.5 py-0.5 rounded text-[8px] bg-slate-500/10 text-slate-400">${c.category}</span>
+                                            <h4 class="font-bold text-xs">${c.title}</h4>
+                                        </div>
+                                        <span class="px-2 py-0.5 rounded text-[8px] font-bold ${c.status === 'Resolved' ? 'bg-green-500/10 text-green-400' : c.status === 'In Progress' ? 'bg-amber-500/10 text-amber-400' : 'bg-rose-500/10 text-rose-400'}">${c.status}</span>
+                                    </div>
+                                    <p class="text-[11px] text-slate-400 leading-relaxed">${c.description}</p>
+                                    <div class="flex justify-between items-center text-[9px] text-slate-500 border-t border-glass-border-light dark:border-glass-border-dark pt-2">
+                                        <span>Date Filed: ${c.date}</span>
+                                        ${c.reply ? `<span class="text-indigo-400 font-bold bg-indigo-500/5 px-2 py-0.5 rounded">Staff: ${c.reply}</span>` : '<span class="italic text-slate-600">Awaiting review...</span>'}
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function handleResidentComplaint(e) {
+            e.preventDefault();
+            const user = auth.getCurrentUser();
+            const complaints = getDB(MOCK_STORAGE_KEY_COMPLAINTS);
+
+            const newC = {
+                id: 'c_res_' + Date.now(),
+                flatNo: user.flatNo,
+                category: document.getElementById('rc-cat').value,
+                title: document.getElementById('rc-title').value.trim(),
+                description: document.getElementById('rc-desc').value.trim(),
+                date: new Date().toISOString().split('T')[0],
+                status: 'Pending',
+                reply: ''
+            };
+
+            complaints.unshift(newC);
+            saveDB(MOCK_STORAGE_KEY_COMPLAINTS, complaints);
+            showToast('Support ticket filed successfully!', 'success');
+            setResidentTab('complaints');
+        }
+
+        // --- Resident: Settings Profile ---
+        function loadResidentProfile(pane) {
+            const user = auth.getCurrentUser();
+            pane.innerHTML = `
+                <div class="max-w-md mx-auto glass-panel p-6 rounded-2xl shadow-xl animate-scale-up">
+                    <div class="flex flex-col items-center gap-3 mb-6 pb-6 border-b border-glass-border-light dark:border-glass-border-dark text-center">
+                        <div class="w-14 h-14 rounded-full bg-indigo-500/15 border border-indigo-500/30 flex items-center justify-center font-bold text-xl text-indigo-400">${user.name.charAt(0)}</div>
+                        <div>
+                            <h3 class="text-lg font-bold">${user.name}</h3>
+                            <p class="text-xs text-slate-400">${user.building ? `Wing ${user.building}, Flat` : 'Plot'} ${user.flatNo}</p>
+                        </div>
+                    </div>
+                    
+                    <form onsubmit="handleProfileSubmit(event)" class="space-y-4 text-xs">
+                        <div>
+                            <label class="text-[10px] text-slate-400 font-bold uppercase">Primary Email</label>
+                            <input type="email" id="p-email" required value="${user.email}" class="w-full px-3 py-2 rounded-xl glass-input mt-1">
+                        </div>
+                        <div>
+                            <label class="text-[10px] text-slate-400 font-bold uppercase">Phone Number</label>
+                            <input type="text" id="p-phone" required value="${user.phone}" class="w-full px-3 py-2 rounded-xl glass-input mt-1">
+                        </div>
+                        <div>
+                            <label class="text-[10px] text-slate-400 font-bold uppercase">Family Occupants count</label>
+                            <input type="number" id="p-count" min="1" value="${user.membersCount}" class="w-full px-3 py-2 rounded-xl glass-input mt-1">
+                        </div>
+                        <button type="submit" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-bold">
+                            Update Account
+                        </button>
+                    </form>
+                </div>
+            `;
+        }
+
+        function handleProfileSubmit(e) {
+            e.preventDefault();
+            const user = auth.getCurrentUser();
+            const members = getDB(MOCK_STORAGE_KEY_MEMBERS);
+            const idx = members.findIndex(m => m.id === user.id);
+
+            const email = document.getElementById('p-email').value.trim();
+            const phone = document.getElementById('p-phone').value.trim();
+            const count = parseInt(document.getElementById('p-count').value, 10);
+
+            members[idx].email = email;
+            members[idx].phone = phone;
+            members[idx].membersCount = count;
+
+            saveDB(MOCK_STORAGE_KEY_MEMBERS, members);
+
+            // Sync session
+            user.email = email;
+            user.phone = phone;
+            user.membersCount = count;
+            localStorage.setItem(MOCK_STORAGE_KEY_SESSION, JSON.stringify(user));
+
+            showToast('Settings saved!', 'success');
+            setResidentTab('profile');
+        }
+
+        // ==========================================
+        // 9. EXCEL & PDF EXPORT UTILITIES (Browser CDN integration)
+        // ==========================================
+        function exportAnalytics() {
+            if (!window.XLSX) { showToast('Excel library offline', 'error'); return; }
+            const stats = calculateStats();
+            const data = [
+                { 'Metric Summary': 'Shital Residency Executive Summary', 'Value': '' },
+                { 'Metric Summary': 'Residents Count', 'Value': stats.membersCount },
+                { 'Metric Summary': 'Income Collections', 'Value': `INR ${stats.totalIncome}` },
+                { 'Metric Summary': 'Overdue Invoices', 'Value': `INR ${stats.totalOutstanding}` },
+                { 'Metric Summary': 'Grace Fine Penalties', 'Value': `INR ${stats.totalPenalties}` },
+                { 'Metric Summary': 'Pending bills count', 'Value': stats.pendingCount }
+            ];
+
+            const ws = XLSX.utils.json_to_sheet(data);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, 'Summary');
+            XLSX.writeFile(wb, `shital_residency_demo_report_${Date.now()}.xlsx`);
+            showToast('Excel Analytics downloaded!', 'success');
+        }
+
+        function exportBills() {
+            if (!window.XLSX) { showToast('Excel library offline', 'error'); return; }
+            const bills = getDB(MOCK_STORAGE_KEY_BILLS);
+            const formatted = bills.map(b => ({
+                'Flat': b.flatNo,
+                'Billing Month': b.month,
+                'Electricity (INR)': b.electricity,
+                'Garbage Fee (INR)': b.garbage,
+                'Clubhouse Maint. (INR)': b.maintenance,
+                'Late Penalty (INR)': b.lateFee,
+                'Total Bill (INR)': b.total,
+                'Payment Status': b.status,
+                'Overdue deadline': b.dueDate
+            }));
+            const ws = XLSX.utils.json_to_sheet(formatted);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, 'Ledger');
+            XLSX.writeFile(wb, `shital_residency_demo_billing_${Date.now()}.xlsx`);
+            showToast('Excel Billing sheet downloaded!', 'success');
+        }
+
+        function importExcel(e) {
+            if (!window.XLSX) { showToast('Excel library offline', 'error'); return; }
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                try {
+                    const data = new Uint8Array(evt.target.result);
+                    const wb = XLSX.read(data, { type: 'array' });
+                    const sheet = wb.Sheets[wb.SheetNames[0]];
+                    const json = XLSX.utils.sheet_to_json(sheet);
+                    
+                    if (json && json.length > 0) {
+                        const current = getDB(MOCK_STORAGE_KEY_MEMBERS);
+                        let imported = 0;
+                        json.forEach((m, idx) => {
+                            const flat = String(m.flatNo || m.Flat || '').trim();
+                            const name = String(m.name || m.Name || '').trim();
+                            if (name && flat) {
+                                const exists = current.some(cm => cm.flatNo === flat);
+                                if (!exists) {
+                                    current.push({
+                                        id: 'm_imp_' + Date.now() + '_' + idx,
+                                        name,
+                                        flatNo: flat,
+                                        building: String(m.building || m.Building || 'A').trim(),
+                                        email: String(m.email || m.Email || `resident_${flat}@society.com`).trim(),
+                                        phone: String(m.phone || m.Phone || '9876543210').trim(),
+                                        status: String(m.status || m.Status || 'Owner').trim(),
+                                        membersCount: parseInt(m.membersCount || m.Members || '3', 10),
+                                        joinDate: new Date().toISOString().split('T')[0]
+                                    });
+                                    imported++;
+                                }
+                            }
+                        });
+                        saveDB(MOCK_STORAGE_KEY_MEMBERS, current);
+                        showToast(`Imported ${imported} residents from Excel!`, 'success');
+                        loadAdminMembers(document.getElementById('admin-main-pane'));
+                    } else {
+                        showToast('Sheet appears empty', 'error');
+                    }
+                } catch (err) {
+                    showToast('Failed to import: ' + err.message, 'error');
+                }
+            };
+            reader.readAsArrayBuffer(file);
+        }
+
+        function downloadReceiptPDF(billId) {
+            if (!window.jspdf) { showToast('PDF Generator library offline', 'error'); return; }
+            const bills = getDB(MOCK_STORAGE_KEY_BILLS);
+            const bill = bills.find(b => b.id === billId);
+            const user = auth.getCurrentUser();
+
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a5' });
+
+            // 1. BRAND HEADER
+            doc.setFillColor(99, 102, 241); // Indigo
+            doc.rect(0, 0, 148, 25, 'F');
+
+            doc.setTextColor(255, 255, 255);
+            doc.setFont('Helvetica', 'bold');
+            doc.setFontSize(14);
+            doc.text('SHITAL RESIDENCY', 10, 11);
+            doc.setFontSize(7);
+            doc.setFont('Helvetica', 'normal');
+            doc.setTextColor(224, 231, 255);
+            doc.text('REG: GDS/2026/MUM-IV | TELEPHONE: +91 99009 90099', 10, 17);
+
+            // 2. RECEIPT METADATA
+            doc.setTextColor(30, 41, 59);
+            doc.setFontSize(11);
+            doc.setFont('Helvetica', 'bold');
+            doc.text('PAYMENT RECEIPT', 10, 36);
+
+            doc.setDrawColor(226, 232, 240);
+            doc.setLineWidth(0.3);
+            doc.line(10, 39, 138, 39);
+
+            doc.setFont('Helvetica', 'normal');
+            doc.setFontSize(8);
+            doc.setTextColor(148, 163, 184);
+            doc.text('RECEIPT ID:', 10, 45);
+            doc.setTextColor(30, 41, 59);
+            doc.text(`GD-${bill.id.toUpperCase()}`, 35, 45);
+
+            doc.setTextColor(148, 163, 184);
+            doc.text(user.building ? 'RESIDENT FLAT:' : 'PLOT NO:', 10, 50);
+            doc.setTextColor(30, 41, 59);
+            doc.text(user.building ? `Wing ${user.building}, Flat ${user.flatNo}` : `Plot ${user.flatNo}`, 35, 50);
+
+            doc.setTextColor(148, 163, 184);
+            doc.text('RESIDENT NAME:', 10, 55);
+            doc.setTextColor(30, 41, 59);
+            doc.text(user.name, 35, 55);
+
+            doc.setTextColor(148, 163, 184);
+            doc.text('PAYMENT ROUTE:', 80, 45);
+            doc.setTextColor(30, 41, 59);
+            doc.text(bill.paymentMethod || 'Online (UPI)', 105, 45);
+
+            doc.setTextColor(148, 163, 184);
+            doc.text('TRANSACTION DATE:', 80, 50);
+            doc.setTextColor(30, 41, 59);
+            doc.text(bill.paymentDate || bill.dueDate, 105, 50);
+
+            doc.line(10, 60, 138, 60);
+
+            // 3. TABLE OF PARTICULARS
+            doc.setFillColor(248, 250, 252);
+            doc.rect(10, 65, 128, 6, 'F');
+            doc.setFont('Helvetica', 'bold');
+            doc.setTextColor(99, 102, 241);
+            doc.text('PARTICULARS & LEVIES', 12, 69);
+            doc.text('AMOUNT (INR)', 112, 69);
+
+            doc.setFont('Helvetica', 'normal');
+            doc.setTextColor(30, 41, 59);
+            let y = 77;
+            const items = [
+                { label: 'Electricity Consumption (Utility)', val: bill.electricity },
+                { label: 'Garbage Collection Levy', val: bill.garbage },
+                { label: 'Clubhouse Maintenance Charge', val: bill.maintenance }
+            ];
+            if (bill.lateFee > 0) items.push({ label: 'Late Payment Fine Penalty', val: bill.lateFee });
+
+            items.forEach(item => {
+                doc.text(item.label, 12, y);
+                doc.text(`Rs. ${item.val.toFixed(2)}`, 112, y);
+                doc.line(10, y + 2, 138, y + 2);
+                y += 7;
+            });
+
+            // TOTAL DUES
+            y += 2;
+            doc.setFillColor(240, 244, 255);
+            doc.rect(10, y - 4, 128, 7, 'F');
+            doc.setFont('Helvetica', 'bold');
+            doc.setTextColor(99, 102, 241);
+            doc.text('NET TRANSACTION TOTAL:', 12, y);
+            doc.text(`Rs. ${bill.total.toFixed(2)}`, 112, y);
+
+            // PAID STAMP SEAL
+            const stampY = y + 8;
+            doc.setDrawColor(34, 197, 94);
+            doc.setLineWidth(0.5);
+            doc.rect(90, stampY, 35, 12);
+            doc.setFillColor(240, 253, 244);
+            doc.rect(90.5, stampY + 0.5, 34, 11, 'F');
+            doc.setTextColor(34, 197, 94);
+            doc.setFontSize(10);
+            doc.text('PAID', 103, stampY + 6);
+            doc.setFontSize(5);
+            doc.setFont('Helvetica', 'normal');
+            doc.text(`Date: ${bill.paymentDate || 'Completed'}`, 94, stampY + 9);
+
+            doc.save(`shital_residency_receipt_flat_${user.flatNo}_${bill.month.replace(' ', '_')}.pdf`);
+            showToast('Receipt PDF downloaded successfully!', 'success');
+        }
+
+        // ==========================================
+        // 10. INITIALIZATION
+        // ==========================================
+        document.addEventListener('DOMContentLoaded', () => {
+            initTheme();
+            resolveRoute();
+        });
+    </script>
+</body>
+</html>
